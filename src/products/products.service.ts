@@ -1,9 +1,16 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+} from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class ProductsService {
+  constructor(private usersService: UsersService) {}
   private products = [
     { type: 'bread', price: 1.5, discount: 0.9, id: 1 },
     { type: 'butter', price: 5, discount: 4, id: 2 },
@@ -31,9 +38,25 @@ export class ProductsService {
     return newProduct;
   }
 
-  findAll() {
-    return this.products;
+  findAll(userId: number) {
+    const user = this.usersService.findOne(userId);
+
+    const dateNow = new Date();
+    const subscriptionEndDate = new Date(user.subscriptionEnd);
+    const hasActiveSubscription = subscriptionEndDate.getTime() > dateNow.getTime();
+  
+    if (hasActiveSubscription) {
+      return this.products;
+    }
+
+    const notDiscountedProducts = this.products.filter(
+      (product) => product.discount === 0
+    );
+
+    return notDiscountedProducts;
   }
+
+
 
   findOne(id: number) {
     if (!id) throw new HttpException('Id is required', HttpStatus.BAD_REQUEST);

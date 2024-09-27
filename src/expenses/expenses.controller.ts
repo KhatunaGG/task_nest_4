@@ -2,14 +2,14 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } fro
 import { ExpensesService } from './expenses.service';
 import { CreateExpenseDto } from './dto/create-expense.dto';
 import { UpdateExpenseDto } from './dto/update-expense.dto';
-import { UsersAuthGuard } from 'src/users/users.guard';
+import { UsersExpenses } from './expensesGuards/usersExpenses.guard';
 
 @Controller('expenses')
 export class ExpensesController {
   constructor(private readonly expensesService: ExpensesService) {}
 
   @Post()
-  @UseGuards(UsersAuthGuard)
+  @UseGuards(UsersExpenses)
   create(@Req() request, @Body() createExpenseDto: CreateExpenseDto) {
     return this.expensesService.create(createExpenseDto, request.userId);
   }

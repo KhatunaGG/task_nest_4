@@ -1,3 +1,4 @@
+
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -10,52 +11,38 @@ export class UsersService {
       id: 1,
       name: 'dato',
       email: 'd@gmail.com',
-      subscriptionStart: new Date().toISOString(),
-      subscriptionEnd: new Date(
-        new Date().setMonth(new Date().getMonth() + 1),
-      ).toISOString(),
+      subscriptionStart: '2024-08-26T08:13:03.135Z',
+      subscriptionEnd: '2024-09-26T08:13:03.135Z',
     },
     {
       id: 2,
       name: 'giorgi',
       email: 'g@gmail.com',
-      subscriptionStart: new Date().toISOString(),
-      subscriptionEnd: new Date(
-        new Date().setMonth(new Date().getMonth() + 1),
-      ).toISOString(),
+      subscriptionStart: '2024-08-26T08:13:03.135Z',
+      subscriptionEnd: '2024-09-26T08:13:03.135Z',
     },
     {
       id: 3,
       name: 'luka',
       email: 'l@gmail.com',
-      subscriptionStart: new Date().toISOString(),
-      subscriptionEnd: new Date(
-        new Date().setMonth(new Date().getMonth() + 1),
-      ).toISOString(),
+      subscriptionStart: '2024-09-26T08:13:03.135Z',
+      subscriptionEnd: '2024-10-26T08:13:03.135Z',
     },
     {
       id: 4,
       name: 'nika',
       email: 'n@gmail.com',
-      subscriptionStart: new Date().toISOString(),
-      subscriptionEnd: new Date(
-        new Date().setMonth(new Date().getMonth() + 1),
-      ).toISOString(),
+      subscriptionStart: '2024-09-26T08:13:03.135Z',
+      subscriptionEnd: '2024-10-26T08:13:03.135Z',
     },
     {
       id: 5,
       name: 'sandro',
       email: 's@gmail.com',
-      subscriptionStart: new Date().toISOString(),
-      subscriptionEnd: new Date(
-        new Date().setMonth(new Date().getMonth() + 1),
-      ).toISOString(),
+      subscriptionStart: '2024-09-26T08:13:03.135Z',
+      subscriptionEnd: '2024-10-26T08:13:03.135Z',
     },
   ];
-
-
-
-
 
   create(createUserDto: CreateUserDto) {
     if (!createUserDto.name || !createUserDto.email) {
@@ -66,8 +53,10 @@ export class UsersService {
     }
 
     const subscriptionStart = new Date();
+
     const subscriptionEnd = new Date(subscriptionStart);
-    subscriptionEnd.setMonth(subscriptionStart.getMonth() + 1);
+    subscriptionEnd.setMonth(subscriptionEnd.getMonth() + 1);
+
 
     const lastId = this.users[this.users.length - 1]?.id || 1;
 
@@ -82,7 +71,6 @@ export class UsersService {
     return newUser;
   }
 
-
   findAll() {
     return this.users;
   }
@@ -95,6 +83,9 @@ export class UsersService {
     return existingUser;
   }
 
+
+
+  
   update(id: number, updateUserDto: UpdateUserDto) {
     if (!id || !updateUserDto.email || !updateUserDto.name) {
       throw new HttpException(
@@ -116,7 +107,6 @@ export class UsersService {
     return updatedUser;
   }
 
-  
   remove(id: number) {
     if (!id) throw new HttpException('Id is required', HttpStatus.BAD_REQUEST);
     const index = this.users.findIndex((el) => el.id === id);

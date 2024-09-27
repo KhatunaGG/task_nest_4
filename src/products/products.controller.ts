@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { ProductGuard } from './products.guard';
+import { ProductGuard } from './productsGuards/products.guard';
+import { UserSubscription } from './productsGuards/userSubscription.guard';
 
 
 @Controller('products')
@@ -15,10 +16,14 @@ export class ProductsController {
     return this.productsService.create(createProductDto);
   }
 
+
+
   @Get()
-  findAll() {
-    return this.productsService.findAll();
+  @UseGuards(UserSubscription)
+  findAll(@Req() request) {
+    return this.productsService.findAll(Number(request.userId));
   }
+
 
   @Get(':id')
   findOne(@Param('id') id: string) {
